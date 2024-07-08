@@ -1,0 +1,24 @@
+    - name: Build Mysql8 Docker image
+      docker_image:
+        name: "{{ MYSQL8_DOCKER_IMAGE_NAME }}"
+        source: build
+        build:
+          pull: true
+          path: "{{ playbook_dir }}/../../build-containers/mysql8-container"
+          dockerfile: Dockerfile
+
+    - name: DevEnv - Run Mysql8
+      docker_container:
+        name: "{{ MYSQL8_DOCKER_CONTAINER_NAME }}"
+        image: "{{ MYSQL8_DOCKER_IMAGE_NAME }}"
+        ports:
+          - "{{ MYSQL8_PORTS }}"
+        env:
+          MYSQL_ROOT_PASSWORD: "{{ MYSQL8_ROOT_PASSWORD }}"
+        volumes:
+          - "{{ playbook_dir }}/../../build-containers/mysql8-container/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d"
+        network_mode: "{{ DOCKER_NETWORK_NAME }}"
+        state: started
+        
+          
+

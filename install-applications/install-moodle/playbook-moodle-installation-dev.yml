@@ -1,0 +1,44 @@
+---
+- name: Playbook To Install Moodle Application
+  hosts: localhost
+  become: true
+  vars:
+    getmoodleby: "gitclone"
+    moodledata_dir: "create-new"
+    moodledata_dir_path: "{{ playbook_dir }}/../../src-projects/www/moodledata"
+  
+    moodle_git_url: "git://git.moodle.org/moodle.git"
+    moodle_git_branch_name_to_clone: "MOODLE_404_STABLE"
+    moodle_git_clone_dest: "{{ playbook_dir }}/../../src-projects/www/html/{{ moodle_git_branch_name_to_clone }}"
+
+  # the moodle database was inserted in _1_init.sql in docker-entrypoint-initdb.d of mysql8 container
+  tasks:
+    - name: DevEnv - git clone moodle sources
+      ansible.builtin.git:
+        repo: "{{ moodle_git_url }}"
+        dest: "{{ moodle_git_clone_dest }}"
+        version: "{{ moodle_git_branch_name_to_clone }}"
+        update: false
+
+    - name: DevEnv - Creating new moodledata dir directory
+      ansible.builtin.file:
+        path: "{{ moodledata_dir_path }}"
+        state: directory
+        mode: "01411" # 0777 with setgid bit set
+      when: moodledata_dir == "create-new"
+
+    - name: DevEnv - copy dev config.php to moodle sources
+      ansible.builtin.copy:
+        src: "{{ playbook_dir }}/config-dev.php"
+        dest: "{{ moodle_git_clone_dest }}/config.php"
+        #owner: "www-data"
+        #group: "www-data"
+        mode: "0777"
+
+#
+#    - name: Set up Moodle cron job
+#      cron:
+#        name: "Run Moodle cron"
+#        minute: "*/5"
+#        job: "php {{ moodle_path }}/admin/cli/cron.php"
+#      become_user: your_system_user

@@ -8,13 +8,27 @@ RUN apt-get update && \
     curl \
     wget \
     vim \
-    nmap
+    nmap \
+    git \    
+    libpng-dev \
+    libonig-dev \
+    libxml2-dev \
+    zip \
+    unzip \
+    libcurl4-openssl-dev \
+    libzip4 \
+    libzip-dev \
+    libsodium-dev
+
+# Clear cache
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Enable Apache modules
 RUN a2enmod proxy_fcgi
 
 # Configure Apache VirtualHost
 COPY 000-default-dev.conf /etc/apache2/sites-available/000-default.conf
+COPY ./90-xdebug.ini "${PHP_INI_DIR}/conf.d"  
 
 RUN chgrp www-data -R /var/www/html
 RUN chmod 750 -R /var/www/html
@@ -29,13 +43,12 @@ RUN chmod g+s /var/www/html
 #which we set to www-data with the second command.
 #https://www.internalpointers.com/post/right-folder-permission-website
 
-#moodledata
-#in production use volume
-#RUN mkdir -p /var/www/moodledata
-#RUN chown www-data:www-data -R /var/www/moodledata
-#RUN chmod 775 -R /var/www/moodledata
-
+# RUN useradd -G www-data,root -u $uid -d /home/$user $user
+# RUN mkdir -p /home/$user/.composer && \
+#     chown -R $user:$user /home/$user
 
 EXPOSE 80
+
+USER ${user}
 
 CMD ["apachectl", "-D", "FOREGROUND"]

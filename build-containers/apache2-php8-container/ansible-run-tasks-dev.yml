@@ -3,9 +3,13 @@
         name: "{{ APACHE2_PHP8_DOCKER_IMAGE_NAME }}"
         source: build
         build:
+          # args:
+          #   user: "{{ APACHE2_DOCKER_USER }}"
+          #   uid: "{{ APACHE2_DOCKER_UID }}"
           pull: yes
           path: "{{ playbook_dir }}/../apache2-php8-container"
           dockerfile: Dockerfile-Dev
+
         
     - name: DevEnv - Run Apache2 docker_container
       docker_container:
@@ -16,6 +20,7 @@
         network_mode: "{{ DOCKER_NETWORK_NAME }}"
         volumes:
           - "{{ DOCKER_VOLUME_WWW_HTML_DIR }}:/var/www/html:Z"
+          - "{{ playbook_dir }}/../src-projects/moodledata:/var/www/moodledata:Z"
         state: started
         
         

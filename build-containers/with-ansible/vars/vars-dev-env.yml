@@ -11,6 +11,9 @@ RUN_IN_DEBUG_MODE: true #true or false
 ### THIS VARIABLES IS SHARED FOR SEVERAL CONTAINERS
 #varios container estarao se comunicando nesta rede
 DOCKER_NETWORK_NAME: phpdev-network-dev
+# usuarios passados como arg para o dockerfile do apache2 php7 e php8
+APACHE2_DOCKER_USER: wgn
+APACHE2_DOCKER_UID: 1000
 #o container do apache, nginx e de php-fpm montam esse diretorio
 #precisa repeitar a estrutura de diretorios do build-containers pra esse  caminho valer
 DOCKER_VOLUME_WWW_HTML_DIR: "{{ playbook_dir }}/../../src-projects/www/html"
@@ -32,7 +35,6 @@ APACHE2_PHP7_DOCKER_IMAGE_NAME: phpdev-apache2-php7:0.0.1
 APACHE2_PHP7_DOCKER_CONTAINER_NAME: phpdev-apache2-php7-dev
 APACHE2_PHP7_PORTS: "7777:80"
 
-
 #PHP8-FPM CONTAINER
 PHP_FPM8_DOCKER_IMAGE_NAME: phpdev-php-fpm8:0.0.1
 PHP_FPM8_DOCKER_CONTAINER_NAME: phpdev-php-fpm8-dev
@@ -43,6 +45,12 @@ PHP_FPM7_DOCKER_IMAGE_NAME: phpdev-php-fpm7:0.0.1
 PHP_FPM7_DOCKER_CONTAINER_NAME: phpdev-php-fpm7-dev
 PHP_FPM7_PORTS: "5557:80"
 
+#MYSQL8 CONTAINER
+MYSQL8_DOCKER_CONTAINER_NAME: phpdev-mysql8-dev
+MYSQL8_DOCKER_IMAGE_NAME: phpdev-mysql8-dev:0.0.1
+MYSQL8_ROOT_PASSWORD: "admin123"
+MYSQL8_PORTS: "3316:3306"
+
 
 #MOODLE_SERVICE_PHP7_FPM_PORTS: "6665:80"
 
@@ -50,9 +58,6 @@ PHP_FPM7_PORTS: "5557:80"
 
 #MOODLE_SERVICE_MOODLEDATA_PATH: "{{ playbook_dir }}/../../src-projects/www/moodledata"
 
-#MOODLE_SERVICE_MARIADB_DOCKER_CONTAINER_NAME: moodle-service-mariadb-dev
-#MOODLE_SERVICE_MARIADB_DOCKER_IMAGE_NAME: moodle-service-mariadb-dev:0.0.1
-#MOODLE_SERVICE_MARIADB_ROOT_PASSWORD: "admin123"
 
 #MOODLE_SERVICE_PHPFPM_DOCKER_CONTAINER_NAME: moodle-service-php7.4-fpm-dev
 #MOODLE_SERVICE_PHPFPM_DOCKER_IMAGE_NAME: moodle-service-php7.4-fpm-dev:0.0.1

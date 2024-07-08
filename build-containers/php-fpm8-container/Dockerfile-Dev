@@ -11,6 +11,8 @@ RUN apt-get update -y
 #dev helper packages
 RUN apt-get install -y iputils-ping curl wget vim nmap
 
+RUN apt-get install -y apache2
+
 #Installing PHP 8.3.6 (cli) (built: Apr 15 2024 19:21:47) (NTS)
 #Copyright (c) The PHP Group
 #Zend Engine v4.3.6, Copyright (c) Zend Technologies
@@ -27,6 +29,10 @@ RUN apt-get install -y php-opcache php-curl php-gd php-zip php-mbstring
 COPY php.ini-development /etc/php/8.3/fpm/php.ini
 COPY php-fpm-dev.conf /etc/php/8.3/fpm/php-fpm.conf
 #www-dev.conf is the pool inside /usr/local/php-fpm.d/*.conf mounted dir at runs container
+
+RUN mkdir -p /var/www/moodledata
+RUN chown -R www-data:www-data /var/www/moodledata
+RUN chmod -R 777 /var/www/moodledata
 
 EXPOSE 9008
 

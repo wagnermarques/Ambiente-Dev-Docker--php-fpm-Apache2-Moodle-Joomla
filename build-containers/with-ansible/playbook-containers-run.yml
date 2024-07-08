@@ -51,7 +51,7 @@
       when: ambiente_de == "dev"
 
 
-    #php8 stack    
+    #php8 stack
     - name: Dev Env Tasks - Building php-fpm8 container for dev env
       ansible.builtin.include_tasks: ./../php-fpm8-container/ansible-run-tasks-dev.yml
       when: ambiente_de == "dev"
@@ -60,8 +60,7 @@
       ansible.builtin.include_tasks: ./../apache2-php8-container/ansible-run-tasks-dev.yml
       when: ambiente_de == "dev"
 
-      
-    #php7 stack
+    # php7 stack
     - name: Dev Env Tasks - Building php7.4-fpm container for dev env
       ansible.builtin.include_tasks: ./../php-fpm7-container/ansible-run-tasks-dev.yml
       when: ambiente_de == "dev"
@@ -70,9 +69,9 @@
       ansible.builtin.include_tasks: ./../apache2-php7-container/ansible-run-tasks-dev.yml
       when: ambiente_de == "dev"
 
-      #- name: Dev Env - Building mariadb container for dev env
-    #  ansible.builtin.include_tasks: ./../mariadb-container/ansible-run-tasks-dev.yml
-    #  when: ambiente_de == "dev"
+    - name: Dev Env - Building mysql8 container for dev env
+      ansible.builtin.include_tasks: ./../mysql8-container/ansible-run-tasks-dev.yml
+      when: ambiente_de == "dev"
 
 #    - name: Dev Env - Building nginx container for dev env
 #      include_tasks: ./infra-nginx-container/tasks-dev.yml
