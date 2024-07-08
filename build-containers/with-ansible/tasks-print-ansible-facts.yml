@@ -1,0 +1,23 @@
+- name: Print Ansible Facts
+  debug:
+    var: item
+  loop:
+    - "{{ APACHE2_PHP8_DOCKER_IMAGE_NAME }}"
+    - "{{ APACHE2_PHP8_DOCKER_CONTAINER_NAME }}"
+    - "{{ APACHE2_PHP8_PORTS }}"
+    - "{{ FACT_ENV_USER }}"
+    - "{{ FACT_ENV_SUDO_GID }}"
+    - "{{ FACT_ENV_SUDO_UID }}"
+    - "{{ FACT_ENV_LOGNAME }}"
+    - "{{ FACT_ENV_LANG }}"
+    - "{{ FACT_HOSTNAME }}"
+    - "{{ FACT_LSB_DESCRIPTION }}"
+    - "{{ FACT_LSB_ID }}"
+    - "{{ FACT_LSB_MAJOR_RELEASE }}"
+    - "{{ FACT_LSB_RELEASE }}"
+    - "{{ FACT_PYTHON_EXECUTABLE }}"
+    - "{{ FACT_PYTHON_HAS_SSLCONTEXT }}"
+    - "{{ FACT_PYTHON_VERSION }}"
+    - "{{ FACT_USER_GID  }}"
+    - "{{ FACT_USER_ID  }}"
+    - "{{ FACT_USER_UID  }}"

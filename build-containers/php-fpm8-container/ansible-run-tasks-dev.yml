@@ -1,0 +1,22 @@
+    - name: DevEnv - Building PHP-FPM8 Docker image
+      docker_image:
+        name: "{{ PHP_FPM8_DOCKER_IMAGE_NAME }}"
+        source: build
+        build:
+          pull: yes
+          path: "{{ playbook_dir }}/../php-fpm8-container"
+          dockerfile: Dockerfile-Dev
+
+    - name: DevEnv - Run PHP-FPM8 container
+      docker_container:
+        name:  "{{ PHP_FPM8_DOCKER_CONTAINER_NAME }}"
+        image:  "{{ PHP_FPM8_DOCKER_IMAGE_NAME }}"
+        ports:
+          - "{{ PHP_FPM8_PORTS }}"
+        network_mode: "{{ DOCKER_NETWORK_NAME }}"
+        volumes:
+          - "{{ DOCKER_VOLUME_WWW_HTML_DIR }}:/var/www/html:Z"
+          - "{{ playbook_dir }}/../php-fpm8-container/usr_local:/usr/local:Z"
+          - "{{ playbook_dir }}/../php-fpm8-container/var_log:/var/log:Z"
+        state: started
+        

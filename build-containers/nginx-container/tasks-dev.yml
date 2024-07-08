@@ -1,0 +1,25 @@
+    - name: Build Nginx Docker image
+      docker_image:
+        name: "{{ MOODLE_SERVICE_NGINX_DOCKER_IMAGE_NAME }}"
+        source: build
+        build:
+          pull: yes
+          path: "{{ playbook_dir }}/infra-nginx-container"
+          dockerfile: DevEnv-Dockerfile
+
+    - name: Run Nginx container
+      docker_container:
+        name: "{{ MOODLE_SERVICE_NGINX_DOCKER_CONTAINER_NAME }}"
+        image: "{{ MOODLE_SERVICE_NGINX_DOCKER_IMAGE_NAME }}"
+        network_mode: "{{ MOODLE_SERVICE_DOCKER_NETWORK_NAME }}"
+        ports:
+          - "{{ MOODLE_SERVICE_NGINX_PORTS }}"
+        volumes:
+          - "{{ MOODLE_SERVICE_DOCKER_VOLUME_WWW_HTML_DIR }}:/usr/share/nginx/html:Z"
+        state: started
+    
+    - name: Debug Mode - show MOODLE_SERVICE_DOCKER_VOLUME_WWW_HTML_DIR value
+      debug:
+        var: MOODLE_SERVICE_DOCKER_VOLUME_WWW_HTML_DIR
+      when: RUN_IN_DEBUG_MODE == "true" 
+      

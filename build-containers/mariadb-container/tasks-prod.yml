@@ -1,0 +1,9 @@
+    - name: Build Mariadb Docker image
+      docker_image:
+        name: "{{ MOODLE_SERVICE_MARIADB_DOCKER_IMAGE_NAME }}"
+        source: build
+        build:
+          pull: yes
+          path: "{{ playbook_dir }}/infra-mariadb-container"
+          dockerfile: DockerfileXXX
+

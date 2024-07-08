@@ -1,0 +1,89 @@
+#+Title: Ambiente para desenvolviento php 
+
+* Builda todos os containers
+ansible-playbook build-containers/with-ansible/playbook-containers-run.yml --ask-become-pass
+
+
+Este e um ambiente de desenvolvimento moodle que usa ansible pra
+facilitar automacoes em devops.
+
+O objetivo é construir o ambiente de dev com um moodle limpo usando
+apenas um comando. Por enquanto precisa de uns dois ou três mas ja
+está interessante.
+
+Essa necessidade foi reconhecida porque pode acontecer de vc quebrar o
+moodle com o seu plugin e precisar reconstruir o ambiente.
+
+* Introdução
+  Provavelmente o ambiente mais interessante pra desenvolver um plugin
+  do moodle será o mais semelhante possível do ambiente de
+  desenvolvimento do próprio moodle.
+
+  Mesmo que vc nao va contribuir com o codigo do moodle o ambiente de
+  desenvolvimento do moodle provavelmente tambem e um bom ambiente de
+  desenvolviemnto do seu plugin.
+
+  Considerando ainda que customizações do moodle deverá ser cada vez
+  mais necessária e recorrente, esse ambiente de desenvolviemnto do
+  moodle deve ser bastante interessante.
+
+  Se vc usa windows, acredito que sera necessario o wsl por causa do
+  ansible e dos containers. Mas acho que é tranquilo.
+
+* Como utilizar
+
+** Fazer o clone do repositorio
+
+#+NAME:
+#+BEGIN_SRC shell :session s1 :results output :exports both 
+git clone  https://github.com/wagnermarques/MoodleDevEnv.git
+#+END_SRC
+
+** Criar os containers
+
+A senha que será solicitada é pra rodar como sudo
+
+#+NAME:
+#+BEGIN_SRC shell :session s1 :results output :exports both 
+./bin/run-playbook-raise-containers.sh
+#+END_SRC
+
+Esses sao os container gerados...
+
+#+begin_example
+[spot@fedora MoodleDevEnv]$ docker container ls
+CONTAINER ID   IMAGE                                               COMMAND                  CREATED        STATUS       PORTS                                      NAMES
+13c3c0eb3fc9   moodle-service-php7.4fpm-service-dev:0.0.1          "docker-php-entrypoi..."   3 hours ago    Up 3 hours   6665/tcp, 9000/tcp, 0.0.0.0:6665->80/tcp   moodle-service-php7.4fpm-service-dev
+4c593c1e7fdc   moodle-service-profaulasapache2-service-dev:0.0.1   "apachectl -D FOREGR..."   3 hours ago    Up 3 hours   0.0.0.0:9998->80/tcp                       moodle-service-profaulasapache2-service-dev
+3496b58cec3d   moodle-service-profaulasmariadb-service-dev:0.0.1   "docker-entrypoint.s..."   13 hours ago   Up 3 hours   3306/tcp                                   moodle-service-profaulasmariadb-service-dev
+#+end_example
+
+** Clonar o moodle pro apache2 poder servi-lo
+
+Esse comando abaixo clona o moodle no /var/www/html  
+
+#+NAME:
+#+BEGIN_SRC shell :session s1 :results output :exports both 
+ ./bin/run-playbook-moodle-installation.sh 
+#+END_SRC
+
+
+** Acessar o moodle
+
+http://localhost:9998/
+
+
+
+* Ref
+
+[fn:1] https://moodle.org/mod/forum/discuss.php?d=434837
+
+[fn:2] https://hub.docker.com/_/php#!
+
+[fn:3] https://moodledev.io/general/development/policies/php#php-supported-versions
+
+[fn:4] https://tracker.moodle.org/browse/MDL-70745
+
+[fn:5] https://tracker.moodle.org/browse/MDL-73016
+
+[fn:6] https://tracker.moodle.org/browse/MDL-76405

@@ -1,0 +1,58 @@
+---
+- name: Playbook To Install Moodle Service
+  hosts: localhost
+  become: yes
+  vars_files:
+    - "{{ 'vars-dev-env.yml' if AMBIENTE_DE == 'dev' else 'vars-prod-env.yml' }}"
+  
+  tasks:
+    - name: DevEnv - Debug Mode - show  MOODLE_SERVICE_DOCKER_VOLUME_WWW_HTML_DIR var
+      debug:
+        var: MOODLE_SERVICE_DOCKER_VOLUME_WWW_HTML_DIR
+      when: RUN_IN_DEBUG_MODE == "true"
+
+    - name: DevEnv - Debug Mode - show MOODLE_SERVICE_MOODLE_GIT_CLONE_REPO_URL
+      debug:
+        var: MOODLE_SERVICE_MOODLE_GIT_CLONE_REPO_URL
+      when: RUN_IN_DEBUG_MODE == "true"
+      
+    - name: DevEnv - Debug Mode - show MOODLE_SERVICE_MOODLE_PATH
+      debug:
+        var: MOODLE_SERVICE_MOODLE_PATH
+      when: RUN_IN_DEBUG_MODE == "true"
+      
+    - name: DevEnv - git clone moodle sources - Clonning Moodle "{{ MOODLE_GIT_BRANCH }}"
+      git:
+        repo: "{{ MOODLE_SERVICE_MOODLE_GIT_CLONE_REPO_URL }}"
+        dest: "{{ MOODLE_SERVICE_MOODLE_GIT_CLONE_DEST_DIR }}"
+        version: "{{ MOODLE_GIT_BRANCH }}"
+        update: false
+      when: getmoodleby == "gitclone"
+        
+    - name: DevEnv - Create moodledata dir
+      ansible.builtin.file:
+        path: "{{ MOODLE_SERVICE_MOODLEDATA_PATH }}"
+        state: directory
+        mode: 777
+  
+    - name: DevEnv - Copy file with owner and permissions
+      ansible.builtin.copy:
+        src: "{{ playbook_dir }}/infra-apache2-container/moodle-config-dev.php"
+        dest: "{{ MOODLE_SERVICE_DOCKER_VOLUME_WWW_HTML_DIR }}/{{ MOODLE_GIT_BRANCH }}/config.php"
+#        owner: www-data
+#        group: www-data
+        mode: '0777'        
+
+
+#    - name: Run Moodle installation script
+#      command: "php admin/cli/install.php"
+#      args:
+#        chdir: "{{ moodle_path }}"
+#      become_user: your_system_user
+#
+#    - name: Set up Moodle cron job
+#      cron:
+#        name: "Run Moodle cron"
+#        minute: "*/5"
+#        job: "php {{ moodle_path }}/admin/cli/cron.php"
+#      become_user: your_system_user

@@ -1,0 +1,20 @@
+FROM nginx:latest
+
+# Update the package index
+RUN apt-get update -y
+
+RUN apt-get update && \
+    apt-get install -y \
+    apache2 \
+    iputils-ping \
+    curl \
+    wget \
+    nmap
+
+# Replace the default nginx configuration with your custom configuration
+COPY default-dev.conf /etc/nginx/conf.d/default.conf
+
+RUN mkdir -p /etc/nginx/snippets
+COPY snippets/fastcgi-php.conf /etc/nginx/snippets/
+
+EXPOSE 80

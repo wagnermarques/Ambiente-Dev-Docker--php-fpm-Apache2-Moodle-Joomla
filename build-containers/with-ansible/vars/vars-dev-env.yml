@@ -1,0 +1,93 @@
+#colocando as variaveis todas juntas vai fornecer pra gente um
+#panorama geral dos nomes dos container e portas que eles usam
+
+#isso e interessante porque e comum a gente ter varios container
+#rodando e ter conflitos entre portas e usar prefixos para os nomes
+#dos container tambem ajudam a entender o proposito deles num docker ps
+
+# show some more output when runs playbook if RUN_IN_DEBUG_MODE is true
+RUN_IN_DEBUG_MODE: true #true or false
+
+### THIS VARIABLES IS SHARED FOR SEVERAL CONTAINERS
+#varios container estarao se comunicando nesta rede
+DOCKER_NETWORK_NAME: phpdev-network-dev
+#o container do apache, nginx e de php-fpm montam esse diretorio
+#precisa repeitar a estrutura de diretorios do build-containers pra esse  caminho valer
+DOCKER_VOLUME_WWW_HTML_DIR: "{{ playbook_dir }}/../../src-projects/www/html"
+
+### THIS VARIABLES IS SPECIFIC FOR EACH CONTAINER
+#NGINX CONTAINER
+NGINX_DOCKER_CONTAINER_NAME: phpdev-nginx-dev
+NGINX_DOCKER_IMAGE_NAME: phpdev-nginx-dev:0.0.1
+NGINX_PORTS: "8887:80"
+
+#APACHE2-PHP8-CONTAINER
+APACHE2_PHP8_DOCKER_IMAGE_NAME: phpdev-apache2-php8:0.0.1
+APACHE2_PHP8_DOCKER_CONTAINER_NAME: phpdev-apache2-php8-dev
+APACHE2_PHP8_PORTS: "8888:80"
+#"proxy:fcgi://phpdev-php-fpm8-dev:9008"
+
+#APACHE2-PHP7-CONTAINER
+APACHE2_PHP7_DOCKER_IMAGE_NAME: phpdev-apache2-php7:0.0.1
+APACHE2_PHP7_DOCKER_CONTAINER_NAME: phpdev-apache2-php7-dev
+APACHE2_PHP7_PORTS: "7777:80"
+
+
+#PHP8-FPM CONTAINER
+PHP_FPM8_DOCKER_IMAGE_NAME: phpdev-php-fpm8:0.0.1
+PHP_FPM8_DOCKER_CONTAINER_NAME: phpdev-php-fpm8-dev
+PHP_FPM8_PORTS: "5558:80"
+
+#PHP8-FPM CONTAINER
+PHP_FPM7_DOCKER_IMAGE_NAME: phpdev-php-fpm7:0.0.1
+PHP_FPM7_DOCKER_CONTAINER_NAME: phpdev-php-fpm7-dev
+PHP_FPM7_PORTS: "5557:80"
+
+
+#MOODLE_SERVICE_PHP7_FPM_PORTS: "6665:80"
+
+
+
+#MOODLE_SERVICE_MOODLEDATA_PATH: "{{ playbook_dir }}/../../src-projects/www/moodledata"
+
+#MOODLE_SERVICE_MARIADB_DOCKER_CONTAINER_NAME: moodle-service-mariadb-dev
+#MOODLE_SERVICE_MARIADB_DOCKER_IMAGE_NAME: moodle-service-mariadb-dev:0.0.1
+#MOODLE_SERVICE_MARIADB_ROOT_PASSWORD: "admin123"
+
+#MOODLE_SERVICE_PHPFPM_DOCKER_CONTAINER_NAME: moodle-service-php7.4-fpm-dev
+#MOODLE_SERVICE_PHPFPM_DOCKER_IMAGE_NAME: moodle-service-php7.4-fpm-dev:0.0.1
+
+#MOODLE_SERVICE_PHP8FPM_DOCKER_CONTAINER_NAME: moodle-service-php8-fpm-dev
+#MOODLE_SERVICE_PHP8FPM_DOCKER_IMAGE_NAME: moodle-service-php8-fpm-dev:0.0.1
+
+
+
+
+#MOODLE_SERVICE_MARIADB_PORTS: "7776:3306"
+
+#MOODLE_SERVICE_MOODLE_GIT_CLONE_REPO_URL: "git://git.moodle.org/moodle.git"
+#MOODLE_SERVICE_MOODLE_PATH: "{{MOODLE_SERVICE_DOCKER_VOLUME_WWW_HTML_DIR }}/{{ MOODLE_GIT_BRANCH }}"   # Update this with the path where you want to install Moodle
+#MOODLE_SERVICE_MOODLE_GIT_CLONE_DEST_DIR:  "{{ MOODLE_SERVICE_MOODLE_PATH }}"
+#MOODLE_GIT_BRANCH: "MOODLE_402_STABLE"
+
+
+#MOODLE_SERVICE_DB_HOST: mysql_container_ip
+#MOODLE_SERVICE_DB_NAME: moodle
+#MOODLE_SERVICE_DB_USER: moodleuser
+#MOODLE_SERVICE_DB_PASSWORD: your_db_password
+
+
+
+
+# COMMON PATH FOR CONTAINERS
+# o www/html e montado no apache2 e no php-fpm pro php ter acesso aos arquivos
+
+
+#instalacao do moodle
+#https://docs.moodle.org/403/en/Installing_Moodle
+#https://docs.moodle.org/403/en/Installation_quick_guide
+#https://docs.moodle.org/403/en/Step-by-step_Installation_Guide_for_Ubuntu
+
+
+#MOODLE_SERVICE_MOODLE_BRANCH MOODLE_410_STABLE  # Update this with the desired Moodle branch
+

@@ -1,0 +1,6 @@
+- name: Dev Creating Docker containers network
+  community.docker.docker_network:
+    name: "{{ DOCKER_NETWORK_NAME }}"
+    driver: bridge
+    state: present
+    

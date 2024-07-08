@@ -1,0 +1,9 @@
+- name: Create Docker Volume
+  docker_volume:
+    name: moodle-service-volume
+  register: result
+  ignore_errors: yes  # Ignore errors if the volume already exists or for other reasons
+
+- name: Debug Docker Volume Creation Result
+  debug:
+    var: result

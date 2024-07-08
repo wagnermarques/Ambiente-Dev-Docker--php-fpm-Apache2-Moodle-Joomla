@@ -1,0 +1,40 @@
+FROM ubuntu:24.10
+
+# Install Apache and additional tools
+RUN apt-get update && \
+    apt-get install -y \
+    apache2 \
+    iputils-ping \
+    curl \
+    wget \
+    vim \
+    nmap
+
+# Enable Apache modules
+RUN a2enmod proxy_fcgi
+
+# Configure Apache VirtualHost
+COPY 000-default-dev.conf /etc/apache2/sites-available/000-default.conf
+
+RUN chgrp www-data -R /var/www/html
+RUN chmod 750 -R /var/www/html
+RUN chmod g+s /var/www/html
+#The last command makes all files/folders created within the directory to automatically
+#take on the group ownership of the parent folder,
+#that is your web server.
+#The s flags is a special mode that represents the setuid/setgid.
+#In simple words, new files and directories created by the web server
+#will have the same group ownership of html/ folder,
+#which we set to www-data with the second command.
+#https://www.internalpointers.com/post/right-folder-permission-website
+
+#moodledata
+#in production use volume
+#RUN mkdir -p /var/www/moodledata
+#RUN chown www-data:www-data -R /var/www/moodledata
+#RUN chmod 775 -R /var/www/moodledata
+
+
+EXPOSE 80
+
+CMD ["apachectl", "-D", "FOREGROUND"]

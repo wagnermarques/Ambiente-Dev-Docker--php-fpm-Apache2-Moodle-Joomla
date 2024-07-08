@@ -1,0 +1,21 @@
+- name: Printing MOODLE_SERVICE_MARIADB_DOCKER_CONTAINER_NAME variable
+  ansible.builtin.debug:
+    var: MOODLE_SERVICE_MARIADB_DOCKER_CONTAINER_NAME 
+
+- name: Build Mariadb Docker image
+  docker_image:
+    name: "{{ MOODLE_SERVICE_MARIADB_DOCKER_IMAGE_NAME }}"
+    tag: 0.0.1
+    source: build
+    build:
+      pull: yes
+      path: "{{ playbook_dir }}/../mariadb-container"
+
+- name: Running Docker mariadb docker Container
+  docker_container:
+    name: "{{ MOODLE_SERVICE_MARIADB_DOCKER_CONTAINER_NAME }}"
+    image: "{{ MOODLE_SERVICE_MARIADB_DOCKER_IMAGE_NAME }}"
+    network_mode: "{{ MOODLE_SERVICE_DOCKER_NETWORK_NAME }}"
+    state: started
+    env:
+      MARIADB_ROOT_PASSWORD: "{{ MOODLE_SERVICE_MARIADB_ROOT_PASSWORD }}"

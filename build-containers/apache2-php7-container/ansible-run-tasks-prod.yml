@@ -1,0 +1,22 @@
+    - name: Build Apache HTTP Server Docker image
+      docker_image:
+        name: '{{ APACHE2_DOCKER_IMAGE_NAME }}'
+        source: build
+        build:
+          pull: yes
+          path: "{{ playbook_dir }}/../apache2-container"
+
+        
+    - name: Run Apache HTTP Server container
+      docker_container:
+        name: "{{ CONTAINER_NAME }}"
+        image: "{{ APACHE2_DOCKER_CONTAINER_NAME }}"
+        ports:
+          - "{{ APACHE2_PORTS }}"
+        volumes:
+          - "{{ DOCKER_VOLUME_WWW_HTML_DIR }}:/var/www:Z"
+        network_mode: "{{ DOCKER_NETWORK_NAME  }}"
+        state: started
+
+
+

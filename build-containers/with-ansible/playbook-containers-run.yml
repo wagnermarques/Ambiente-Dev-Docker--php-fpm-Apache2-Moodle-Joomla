@@ -1,0 +1,79 @@
+---
+- name: Build and run Apache HTTP Server container
+  hosts: localhost
+  become: true
+  gather_facts: true
+  vars:
+    #global ansible vars
+    ambiente_de: "dev" #valid values is dev, prod, homolog
+    
+    # Environment variables about user
+    FACT_ENV_USER: ansible_facts.env.USER
+    FACT_ENV_SUDO_GID: ansible_facts.env.SUDO_GID
+    FACT_ENV_SUDO_UID: ansible_facts.env.SUDO_UID
+    FACT_ENV_LOGNAME: ansible_facts.env.LOGNAME
+    FACT_USER_GID: ansible_facts.user_gid
+    FACT_USER_ID: ansible_facts.user_id
+    FACT_USER_UID: ansible_facts.user_uid
+
+    # Environment variables about system
+    FACT_ENV_LANG: ansible_facts.env.LANG
+    FACT_HOSTNAME: ANSIBLE_FACTS.hostname
+    FACT_LSB_DESCRIPTION: ansible_facts.lsb.description
+    FACT_LSB_ID: ansible_facts.lsb.id
+    FACT_LSB_MAJOR_RELEASE: ansible_facts.lsb.major_release
+    FACT_LSB_RELEASE: ansible_facts.lsb.release
+
+    # Environment variables about python inside system
+    FACT_PYTHON_EXECUTABLE: ansible_facts.python.executable
+    FACT_PYTHON_HAS_SSLCONTEXT: ansible_facts.python.has_sslcontext
+    FACT_PYTHON_VERSION: ansible_facts.python_version
+
+  # Environment variables about containers to be runned in this playbook
+  # Load the environment variables from the vars files considering the environment type
+  # ambiente_de: dev or prod (default value is dev)
+  # Load var-dev-env.yml if ambiente_de is dev or var-prod-env.yml if ambiente_de is prod
+  vars_files:
+    - "{{ playbook_dir }}/vars/vars-dev-env.yml"
+
+  tasks:
+    - name: Printing var-dev-env.yml variables
+      ansible.builtin.debug:
+        msg: "DOCKER_VOLUME_WWW_HTML_DIR: {{ DOCKER_VOLUME_WWW_HTML_DIR }}"
+      when: "{{ RUN_IN_DEBUG_MODE }} == true"
+
+    - name: Printing ansible facts if running_in_debug_mode is true
+      ansible.builtin.include_tasks: ./tasks-print-ansible-facts.yml
+      when: "{{ RUN_IN_DEBUG_MODE }} == true"
+
+    - name: Creating Docker containers network for containers
+      ansible.builtin.include_tasks: ./tasks-docker-network-dev.yml
+      when: ambiente_de == "dev"
+
+
+    #php8 stack    
+    - name: Dev Env Tasks - Building php-fpm8 container for dev env
+      ansible.builtin.include_tasks: ./../php-fpm8-container/ansible-run-tasks-dev.yml
+      when: ambiente_de == "dev"
+
+    - name: Dev Env - Building apache2 PHP8 container for dev env
+      ansible.builtin.include_tasks: ./../apache2-php8-container/ansible-run-tasks-dev.yml
+      when: ambiente_de == "dev"
+
+      
+    #php7 stack
+    - name: Dev Env Tasks - Building php7.4-fpm container for dev env
+      ansible.builtin.include_tasks: ./../php-fpm7-container/ansible-run-tasks-dev.yml
+      when: ambiente_de == "dev"
+
+    - name: Dev Env - Building apache2 PHP7 container for dev env
+      ansible.builtin.include_tasks: ./../apache2-php7-container/ansible-run-tasks-dev.yml
+      when: ambiente_de == "dev"
+
+      #- name: Dev Env - Building mariadb container for dev env
+    #  ansible.builtin.include_tasks: ./../mariadb-container/ansible-run-tasks-dev.yml
+    #  when: ambiente_de == "dev"
+
+#    - name: Dev Env - Building nginx container for dev env
+#      include_tasks: ./infra-nginx-container/tasks-dev.yml
+#      when: ambiente_de == "dev"

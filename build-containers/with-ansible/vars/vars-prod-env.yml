@@ -1,0 +1,33 @@
+MOODLE_SERVICE_NGINX_DOCKER_CONTAINER_NAME: moodle-service-nginx-service-dev
+MOODLE_SERVICE_NGINX_DOCKER_IMAGE_NAME: moodle-service-nginx-service-dev:0.0.1
+
+MOODLE_SERVICE_APACHE2_DOCKER_CONTAINER_NAME: moodle-service-apache2-service-dev
+MOODLE_SERVICE_APACHE2_DOCKER_IMAGE_NAME: moodle-service-apache2-service-dev:0.0.1
+
+MOODLE_SERVICE_MARIADB_DOCKER_CONTAINER_NAME: moodle-service-mariadb-service-dev
+MOODLE_SERVICE_MARIADB_DOCKER_IMAGE_NAME: moodle-service-mariadb-service-dev:0.0.1
+
+MOODLE_SERVICE_PHP7.4FPM_DOCKER_CONTAINER_NAME: moodle-service-php7.4fpm-service-dev
+MOODLE_SERVICE_PHP7.4FPM_DOCKER_IMAGE_NAME: moodle-service-php7.4fpm-service-dev:0.0.1
+
+MOODLE_SERVICE_PHP8FPM_DOCKER_CONTAINER_NAME: moodle-service-php8fpm-service-dev
+MOODLE_SERVICE_PHP8FPM_DOCKER_IMAGE_NAME: moodle-service-php8fpm-service-dev:0.0.1
+
+MOODLE_SERVICE_APACHE2_PORTS: "9998:80"
+MOODLE_SERVICE_PHP7.4_FPM_PORTS: "6665:80"
+MOODLE_SERVICE_PHP8_FPM_PORTS: "7665:80"
+MOODLE_SERVICE_NGINX_PORTS: "8887:80"
+MOODLE_SERVICE_MARIADB_PORTS: "7776:3306"
+
+MOODLE_SERVICE_MOODLE_PATH: /path/to/moodle   # Update this with the path where you want to install Moodle
+MOODLE_SERVICE_DB_NAME: moodle
+MOODLE_SERVICE_DB_USER: moodleuser
+MOODLE_SERVICE_DB_PASSWORD: 1234
+
+MOODLE_SERVICE_MOODLE_BRANCH: MOODLE_410_STABLE  # Update this with the desired Moodle branch
+MOODLE_GIT_ORIGINAL_REPO_URL: "git://git.moodle.org/moodle.git"
+MOODLE_SERVICE_MOODLE_GIT_REPO_URL: "https://github.com/wagnermarques/moodle.git"
+MOODLE_SERVICE_MOODLE_GIT_CLONE_TARGET_DIR: moodle_target_dir="{{ WWW_HTML_DIR }}"
+
+
+MOODLE_SERVICE_DOCKER_VOLUME_WWW_HTML_DIR: "{{ playbook_dir }}/www/html"
