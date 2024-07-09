@@ -72,7 +72,7 @@
     - name: Dev Env - Building mysql8 container for dev env
       ansible.builtin.include_tasks: ./../mysql8-container/ansible-run-tasks-dev.yml
       when: ambiente_de == "dev"
-
+      
 #    - name: Dev Env - Building nginx container for dev env
 #      include_tasks: ./infra-nginx-container/tasks-dev.yml
 #      when: ambiente_de == "dev"

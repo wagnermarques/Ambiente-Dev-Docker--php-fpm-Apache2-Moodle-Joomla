@@ -1,4 +1,8 @@
 Downloads
 src-projects/www/html
+vendor
+node_modules
+
+*.log
 \#*#
 *~

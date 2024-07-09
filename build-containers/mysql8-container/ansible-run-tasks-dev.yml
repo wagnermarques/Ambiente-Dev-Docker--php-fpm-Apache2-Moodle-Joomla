@@ -20,5 +20,17 @@
         network_mode: "{{ DOCKER_NETWORK_NAME }}"
         state: started
         
+    - name: DevEnv - Run phpmyadmin
+      docker_container:
+        name: phpdev-phpmyadmin
+        image: phpmyadmin/phpmyadmin
+        ports:
+          - "9090:80"
+        env:
+          PMA_HOST=phpdev-mysql8-dev
+          PMA_USER=root
+          PMA_PASSWORD=admin123
+        network_mode: "{{ DOCKER_NETWORK_NAME }}"
+        state: started
           
 
