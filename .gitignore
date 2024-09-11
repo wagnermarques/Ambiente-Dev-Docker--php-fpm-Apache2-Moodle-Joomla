@@ -3,6 +3,8 @@ src-projects/www/html
 vendor
 node_modules
 
+#remove all log files wherever they are
+\*.log
 *.log
 \#*#
 *~

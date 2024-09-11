@@ -29,10 +29,9 @@ RUN chmod g+s /var/www/html
 #https://www.internalpointers.com/post/right-folder-permission-website
 
 #moodledata
-#in production use volume
-#RUN mkdir -p /var/www/moodledata
-#RUN chown www-data:www-data -R /var/www/moodledata
-#RUN chmod 775 -R /var/www/moodledata
+RUN mkdir -p /var/www/moodledata
+RUN chown www-data:www-data -R /var/www/moodledata
+RUN chmod 775 -R /var/www/moodledata
 
 
 EXPOSE 80
