@@ -10,7 +10,7 @@ RUN_IN_DEBUG_MODE: true #true or false
 
 ### THIS VARIABLES IS SHARED FOR SEVERAL CONTAINERS
 #varios container estarao se comunicando nesta rede
-DOCKER_NETWORK_NAME: phpdev-network-dev
+DOCKER_NETWORK_NAME: a-common-network-name
 # usuarios passados como arg para o dockerfile do apache2 php7 e php8
 APACHE2_DOCKER_USER: wgn
 APACHE2_DOCKER_UID: 1000
